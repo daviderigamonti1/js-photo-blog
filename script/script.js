@@ -22,6 +22,26 @@ const resource = "photos";
 const endPoint = baseUrl + resource;
 const params = { "_limit": 6 };
 
+const container = document.getElementById("cardsContainer");
 axios.get(baseUrl + resource, { params }).then((res) => {
-    console.log(res.data);
+    drawCard(res);
 });
+function drawCard(res) {
+    const photos = res.data;
+    let template = "";
+    for (let i = 0; i < photos.length; i++) {
+        template += `
+            <div class="col debug">
+                <div class="card">
+                    <div class="card-image">
+                        <img src="${photos[i].url}" alt="">
+                    </div>
+                    <div class="card-text">
+                        <p>${photos[i].title}</p>
+                    </div>
+                </div>
+            </div>
+        `
+        container.innerHTML = template;
+    };
+}

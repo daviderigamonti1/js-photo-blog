@@ -1,0 +1,51 @@
+/*Reset*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Edu TAS Beginner", sans-serif;
+}
+
+header {
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url(../img/wall.png);
+    font-size: 2em;
+}
+
+body {
+    background-image: url(../img/cork.png);
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.col {
+    width: calc(100% / 3);
+}
+
+.debug {
+    border: 1px solid red;
+}
+
+@media screen and (max-width: 768px) {
+    .col {
+        width: calc(100% / 2);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .col {
+        width: calc(100% / 1);
+    }
+}

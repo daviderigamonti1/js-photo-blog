@@ -22,26 +22,56 @@ const resource = "photos";
 const endPoint = baseUrl + resource;
 const params = { "_limit": 6 };
 
+//Overlay
+const overlay = document.getElementById("overlay");
+const overlayBtn = overlay.querySelector("button");
+const overlayImg = overlay.querySelector("#overlay img");
+
 const container = document.getElementById("cardsContainer");
 axios.get(baseUrl + resource, { params }).then((res) => {
-    drawCard(res);
-});
-function drawCard(res) {
+    drawCards(res);
+    getFigures(res)
+})
+    .catch((error) => {
+        console.log(error)
+    });//.finally
+
+//Funzione per creare tutte le cards ed aggiungerle nell'html
+function drawCards(res) {
     const photos = res.data;
     let template = "";
     for (let i = 0; i < photos.length; i++) {
         template += `
-            <div class="col debug">
+            <div class="col">
                 <div class="card">
                     <div class="card-image">
-                        <img src="${photos[i].url}" alt="">
+                        <img src="${photos[i].url}" alt="${photos[i].title}">
                     </div>
                     <div class="card-text">
                         <p>${photos[i].title}</p>
                     </div>
+                    <img class="pin" src="img/pin.svg" alt="pin">
                 </div>
             </div>
         `
-        container.innerHTML = template;
     };
+    container.innerHTML = template;
+}
+
+
+function getFigures(res) {
+    const photos = res.data;
+    const images = document.querySelectorAll(".card-image img");
+    images.forEach((image, index) => {
+        image.addEventListener("click", function () {
+            const selectedPhoto = photos[index];
+            console.log(selectedPhoto);
+            overlayImg.src = selectedPhoto.url;
+            overlayImg.alt = selectedPhoto.title;
+            overlay.classList.remove("d-none");
+        })
+        overlayBtn.addEventListener("click", function () {
+            overlay.classList.add("d-none");
+        })
+    });
 }

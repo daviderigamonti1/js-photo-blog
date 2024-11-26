@@ -1,25 +1,9 @@
-/*
-
-*Milestone 1*
-Sfruttando gli screen e gli asset in allegato riproduciamo la grafica proposta in maniera statica: utilizzando soltanto HTML e CSS e riproducendo una singola fotografia (usiamo una qualunque immagine a piacimento)
-*Milestone 2*
-Utilizzando Postman, testiamo una chiamata all’endpoint di JSON Placeholder:
-https://jsonplaceholder.typicode.com/photos?_limit=6
-Studiamo bene la risposta e i dati che ci fornisce iniziando a pensare a come poterli sfruttare.
-*Milestone 3*
-Inseriamo un foglio JavaScript ed effettuiamo una chiamata AJAX all’API di JSON Placeholder, sfruttando la risposta per generare dinamicamente in pagina una serie di foto!
-*Bonus*
-rendi la pagina responsive, in modo che su mobile e tablet le foto si dispongano man mano una sotto l’altra ed il titolo abbia una dimensione adeguata
-
-https://jsonplaceholder.typicode.com/
-Font: Edu Tas Beginner
-
-*/
-
 const baseUrl = "https://jsonplaceholder.typicode.com/"
 const resource = "photos";
 
+// Combinazione della base URL con la risorsa per ottenere l'endpoint completo
 const endPoint = baseUrl + resource;
+//Parametro per limitare il numero di foto
 const params = { "_limit": 6 };
 
 //Overlay
@@ -27,19 +11,31 @@ const overlay = document.getElementById("overlay");
 const overlayBtn = overlay.querySelector("button");
 const overlayImg = overlay.querySelector("#overlay img");
 
+//Contenitore in cui saranno aggiunte le foto
 const container = document.getElementById("cardsContainer");
-axios.get(baseUrl + resource, { params }).then((res) => {
-    drawCards(res);
-    getFigures(res)
-})
+
+// Effettuo una richiesta GET all'API con i parametri definiti
+axios.get(baseUrl + resource, { params })
+
+    //Quando la risposta è ricevuta correttamente richiamo le funzioni
+    .then((res) => {
+        drawCards(res);
+        getFigures(res)
+    })
+
+    //In caso di errore nella richiesta
     .catch((error) => {
         console.log(error)
-    });//.finally
+    });
 
 //Funzione per creare tutte le cards ed aggiungerle nell'html
 function drawCards(res) {
+
+    //Ottengo i dati delle foto dalla risposta
     const photos = res.data;
     let template = "";
+
+    //Ciclo su tutte le foto
     for (let i = 0; i < photos.length; i++) {
         template += `
             <div class="col">
@@ -58,18 +54,29 @@ function drawCards(res) {
     container.innerHTML = template;
 }
 
-
+// Funzione per gestire l'overlay e la visualizzazione delle immagini ingrandite
 function getFigures(res) {
     const photos = res.data;
     const images = document.querySelectorAll(".card-image img");
+
+    //Ciclo su tutte le immagini
     images.forEach((image, index) => {
+
+        //Evento al click sulle immagini
         image.addEventListener("click", function () {
+
+            //Ottengo la foto selezionata in base all'indice
             const selectedPhoto = photos[index];
-            console.log(selectedPhoto);
+
+            // Imposto l'URL dell'immagine nell'overlay
             overlayImg.src = selectedPhoto.url;
+
+            //Imposto il titolo dell'immagine nell'overlay
             overlayImg.alt = selectedPhoto.title;
             overlay.classList.remove("d-none");
         })
+
+        // Evento per il bottone di chiusura dell'overlay
         overlayBtn.addEventListener("click", function () {
             overlay.classList.add("d-none");
         })
